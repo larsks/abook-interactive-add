@@ -15,15 +15,41 @@ Subject: dummy message for abook
 This is a dummy message.
 '''
 
+header_template='''{hr}
+Add addresses to address book
+{hr}
+
+Use arrow keys (↑, ↓) to move and the space bar to select/unselect. Press
+enter to confirm your selection.
+
+'''
+
+
+def get_terminal_width():
+    try:
+        width = int(subprocess.check_output(['tput', 'cols']))
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        width = 0
+
+    return width
+
 
 def parse_args():
     p = argparse.ArgumentParser()
     return p.parse_args()
 
 
-def main():
+def header():
+    width = get_terminal_width()
     subprocess.call(['clear'])
+    print(header_template.format(hr='=' * width))
+    print
+
+
+def main():
     args = parse_args()
+
+    header()
 
     # read message from stdin
     msg = email.message_from_file(sys.stdin)
