@@ -72,6 +72,7 @@ def main():
     ]
 
     answers = inquirer.prompt(questions)
+    added = 0
     for address in answers['selected']:
         try:
             subprocess.check_call(['abook', '--mutt-query', address],
@@ -79,15 +80,19 @@ def main():
         except subprocess.CalledProcessError:
             pass
         else:
-            print(f'Address {address} already exsists in abook (skipping)')
+            print(f'Address {address} already exsists in your address '
+                  'book (skipping)')
             continue
 
-        print(f'Adding address {address} to abook')
+        print(f'Adding address {address} to your address book')
+        added += 1
         address_fmt = email.utils.formataddr((addrs[address], address))
         msg = message_template.format(address=address_fmt).encode()
         abook = subprocess.run(['abook', '--add-email-quiet'],
                                input=msg,
                                check=True)
+
+    print(f'Added {added} addresses to your address book')
 
 if __name__ == '__main__':
     main()
