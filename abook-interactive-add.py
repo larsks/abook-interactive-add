@@ -22,6 +22,7 @@ def parse_args():
 
 
 def main():
+    subprocess.call(['clear'])
     args = parse_args()
 
     # read message from stdin
